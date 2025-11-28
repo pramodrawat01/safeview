@@ -1,7 +1,4 @@
 
-
-
-
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -55,7 +52,7 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     }
     
   },[auth, dispatch])
-  
+
   if (auth.loading) return <p>Checking authentication...</p>;
   if (!auth.isAuthenticated) return <Navigate to="/login" replace />;
 

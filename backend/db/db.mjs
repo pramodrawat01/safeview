@@ -16,6 +16,10 @@ const Videos = JSON.parse(fs.readFileSync(videosPath, "utf-8"));
 
 dotenv.config();
 
+
+//  used this to feed the data to backend once only 
+// if required we can run this again with (node db/db.mjs)
+
 const connection = async()=>{
     try {
         await mongoose.connect(process.env.MONGODB_URI)

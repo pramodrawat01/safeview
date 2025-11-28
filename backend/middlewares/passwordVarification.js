@@ -37,7 +37,6 @@ export const verifyPassword = async(req, res, next)=>{
         throw err
     }
 
-    
         let hashedPassword = user.password
         const isVerified = await bcrypt.compare(password, hashedPassword)
 

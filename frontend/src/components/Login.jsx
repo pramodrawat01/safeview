@@ -62,29 +62,7 @@ const Login = () => {
 
     }
   return (
-    // <div>
     
-    // <p>Login page</p>
-
-    // <div>
-    //     <input
-    //     onChange={(e)=>{
-    //         setUser({...user, userName : e.target.value})
-    //     }}
-    //     type='text' placeholder='enter userName here' />
-
-    //     <input
-    //     onChange={(e) => {
-    //         setUser({...user, password : e.target.value})
-    //     }} 
-    //     type="password" placeholder='enter password' />
-
-
-    //     <button onClick={()=>handleLogin()}>login </button>
-    // </div>
-    
-    
-    // </div>
 
 
     <div className=" mt-6 flex flex-col items-center justify-center bg-white text-black px-4">

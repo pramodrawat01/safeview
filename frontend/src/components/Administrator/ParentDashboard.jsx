@@ -81,7 +81,8 @@ const ParentDashboard = () => {
      return toast.error('enter the detail first to create new child')
     }
 
-    // check valid userName and strong password here 
+    // check valid userNam and strong password here 
+    // although backend is verifying but sill ...
 
     console.log(user, 'child is about to create')
     try {
