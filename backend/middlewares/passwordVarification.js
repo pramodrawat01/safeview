@@ -1,25 +1,35 @@
 import validator from 'validator'
 import Parent from '../models/parent.js'
 import bcrypt from 'bcrypt'
+import Kid from '../models/kid.js'
 
 export const verifyPassword = async(req, res, next)=>{
 
-    const { email, password} = req.body 
 
-    if(!email || !password){
+    try {
+
+    const { userName, password} = req.body 
+
+
+
+    if(!password || !userName){
             const err = new Error("Fill all details first to login")
             err.statusCode = 400
             throw err
         }
+
+    let user;
+
+    // parent login 
+    user = await Parent.findOne({userName})
     
-    if(!validator.isEmail(email)){
-        const err = new Error("Invalid email, it must be in correct format!")
-        err.statusCode = 400
-        throw err
+
+    // kid login 
+    if(!user){
+        user = await Kid.findOne({userName})
     }
+    
 
-
-    const user = await Parent.findOne({email})
 
     if(!user){
         const err = new Error("invalid credintials")
@@ -27,8 +37,7 @@ export const verifyPassword = async(req, res, next)=>{
         throw err
     }
 
-    try {
-
+    
         let hashedPassword = user.password
         const isVerified = await bcrypt.compare(password, hashedPassword)
 

@@ -6,6 +6,8 @@ import { errorHandler } from './middlewares/errorHandler.js'
 import cors from 'cors'
 import authRoutes from './routes/authRoutes.js'
 import parentRoutes from './routes/parentRoute.js'
+import childRoutes from './routes/childRoutes.js'
+import playlistRoutes from './routes/playlistRoutes.js'
 
 dotenv.config()
 connection(process.env.MONGODB_URI)
@@ -22,7 +24,10 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use('/api/v1/auth', authRoutes)
-app.use('/api/v1/auth', parentRoutes)
+app.use('/api/v1/parent', parentRoutes)
+app.use('/api/v1/kid', childRoutes )
+app.use('/api/v1/playlist', playlistRoutes)
+
 
 
 

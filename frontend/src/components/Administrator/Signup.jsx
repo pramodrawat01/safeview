@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -7,9 +8,11 @@ const Signup = () => {
     const [user, setUser] = useState({
         userName : '',
         password : '',
-        email : ''
     })
     const [error, setError] = useState('')
+
+    const role = useSelector(state => state.auth.role || JSON.parse(localStorage.getItem('Role')))
+
     const navigate = useNavigate()
 
     
@@ -18,7 +21,7 @@ const Signup = () => {
     }
 
     const handleSignup = async()=>{
-        if(!user.userName || !user.password || !user.email){
+        if(!user.userName || !user.password ){
             toast.error('add all the details first!')
         }
 
@@ -37,7 +40,12 @@ const Signup = () => {
             const data = await res.json()
 
             if(res.status === 400){
+               return console.log(data.message)
+            }
+
+            if(res.status === 409){
                 console.log(data.message)
+                return toast.error('user already exist, choose different name')
             }
 
             if(res.status === 201){
@@ -54,34 +62,46 @@ const Signup = () => {
     }
 
 
+    if(role === 'kid'){
+        return <div>u are not permited to signup</div>
+    }
+
   return (
-    <div>
-        <div>Signup here </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black px-4">
 
-        <div>
-            <input
-                onChange={(e)=> {
-                    setUser({...user, userName : e.target.value})
-                }}
-             type='text' placeholder='username'/>
+    <div className="text-2xl font-bold mb-6">Signup here</div>
+    <p>create a new Administrator account</p>
 
-            <input
-                onChange={(e)=>{
-                    setUser({...user, email : e.target.value})
-                }}
-            type='email' placeholder='enter email'/>
+    <div className="w-full max-w-sm space-y-4 border p-6 rounded-md shadow-sm">
 
-            <input 
-            onChange={(e)=> {
-                setUser({...user, password : e.target.value})
-            }}
-            type='password' placeholder='enter password'/>
+        <input
+        onChange={(e) => {
+            setUser({ ...user, userName: e.target.value })
+        }}
+        type="text"
+        placeholder="username"
+        className="border w-full p-2 rounded-md outline-none focus:border-black"
+        />
 
-            
+        <input
+        onChange={(e) => {
+            setUser({ ...user, password: e.target.value })
+        }}
+        type="password"
+        placeholder="enter password"
+        className="border w-full p-2 rounded-md outline-none focus:border-black"
+        />
 
-            <button onClick={()=> handleSignup() }>signup </button>
-        </div>
+        <button
+        onClick={() => handleSignup()}
+        className="w-full border border-black py-2 rounded-md font-semibold hover:bg-black hover:text-white transition"
+        >
+        signup
+        </button>
+
     </div>
+    </div>
+
   )
 }
 

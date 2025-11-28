@@ -4,13 +4,9 @@ const parentSchema = new Schema({
     userName : {
         type : String,
         required : [true, "userName is required"],
+        unique : [true, 'must be unique']
     },
-    email : {
-        type : String,
-        required : [true, "email is required"],
-        unique : [true, ""],
-        
-    },
+    
     password :{
         type : String,
         required : [true, "please enter the password"],

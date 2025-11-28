@@ -1,21 +1,27 @@
 import React from 'react'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { setRole } from '../redux/authSlice'
 
 const Login = () => {
     const [user, setUser] = useState({
-        email : '',
-        password : ''
+        
+        password : '',
+        userName : ''
     })
+
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
     const handleLogin = async()=>{
-        if(!user.email || !user.password){
+        if(!user.userName || !user.password){
             toast.error("fill all detals first to login!")
         }
 
+        
         // console.log(user, "users details")
 
         try {
@@ -39,9 +45,12 @@ const Login = () => {
             if(res.status === 200){
                 console.log("logged in successfull", data)
                 toast.success(data.message || "login done")
-
-                console.log("before navigating to dashboard")
-                navigate('/dashboard')
+                
+                if (data.role === "parent") {
+                    navigate("/parent_dashboard");
+                } else {
+                    navigate("/child_dashboard");
+                }
 
             }
 
@@ -53,29 +62,62 @@ const Login = () => {
 
     }
   return (
-    <div>
+    // <div>
     
-    <p>Login page</p>
+    // <p>Login page</p>
 
-    <div>
-        <input
-        onChange={(e)=>{
-            setUser({...user, email : e.target.value})
-        }}
-        type='email' placeholder='enter email here' />
+    // <div>
+    //     <input
+    //     onChange={(e)=>{
+    //         setUser({...user, userName : e.target.value})
+    //     }}
+    //     type='text' placeholder='enter userName here' />
 
-        <input
-        onChange={(e) => {
-            setUser({...user, password : e.target.value})
-        }} 
-        type="password" placeholder='enter password' />
+    //     <input
+    //     onChange={(e) => {
+    //         setUser({...user, password : e.target.value})
+    //     }} 
+    //     type="password" placeholder='enter password' />
 
 
-        <button onClick={()=>handleLogin()}>login </button>
-    </div>
+    //     <button onClick={()=>handleLogin()}>login </button>
+    // </div>
     
     
-    </div>
+    // </div>
+
+
+    <div className=" mt-6 flex flex-col items-center justify-center bg-white text-black px-4">
+  
+  <p className="text-2xl font-bold mb-6">Login page</p>
+
+  <div className="w-full max-w-sm space-y-4 border p-6 rounded-md shadow-sm">
+
+    <input
+      className="border w-full p-2 rounded-md outline-none focus:border-black"
+      onChange={(e)=> setUser({ ...user, userName: e.target.value })}
+      type="text"
+      placeholder="enter userName here"
+    />
+
+    <input
+      className="border w-full p-2 rounded-md outline-none focus:border-black"
+      onChange={(e)=> setUser({ ...user, password: e.target.value })}
+      type="password"
+      placeholder="enter password"
+    />
+
+    <button
+      onClick={()=> handleLogin()}
+      className="w-full border border-black py-2 rounded-md font-semibold hover:bg-black hover:text-white transition"
+    >
+      login
+    </button>
+
+  </div>
+
+</div>
+
   )
 }
 

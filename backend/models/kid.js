@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { model, Schema } from "mongoose";
 
 const allowedCategories = [
     "Sports",
@@ -33,14 +33,18 @@ const kidSchema =  new Schema({
         default: "kid",
     },
 
-    allowedCategories : [
+    allowedCategories : {
+        type : [String],
+        enum : {
+            values : allowedCategories,
+            message : "invalid category"
+        }, 
+        default : allowedCategories
+    },
+    playlists : [
         {
-            type :String,
-            enum : {
-                values : allowedCategories,
-                message : "invalid category"
-            },
-            default : allowedCategories
+            type : Schema.Types.ObjectId,
+            ref : 'Playlist'
         }
     ]
 },  

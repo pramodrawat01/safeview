@@ -1,12 +1,13 @@
 import { Router } from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
-import { createChild, parentDashboard, verify } from "../controllers/parentController.js";
+import { createChild, getAllChilds, updateChild } from "../controllers/parentController.js";
 
 const parentRoutes = Router()
 
-parentRoutes.get('/verify', authMiddleware, verify )
-parentRoutes.get('/parent/dashboard', authMiddleware,  parentDashboard)
 
-parentRoutes.post('/create_child', createChild )
+parentRoutes.post('/create_child', authMiddleware, createChild )
+parentRoutes.get('/get_all_childs', authMiddleware, getAllChilds)
+
+parentRoutes.post('/update_child', authMiddleware, updateChild)
 
 export default parentRoutes

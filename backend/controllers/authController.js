@@ -4,9 +4,27 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 export const signup = async( req, res)=>{
-    const {userName, password, email} = req.body
+    const {userName, password} = req.body
 
-    if(!userName || !password || !email){
+    // const accessId = req.user.id 
+
+    // if(!accessId){
+    //     const err = new Error("not autenticated! login first")
+    //     err.statusCode = 401
+    //     throw err
+    // }
+
+    // const checkParent = await Parent.findById(accessId) 
+
+    //  if(!checkParent){
+    //     const err = new Error("parent account not found, signup first")
+    //     err.statusCode = 404
+    //     throw err
+    // }
+    // console.log(checkParent, "this is allowed parent")
+
+
+    if(!userName || !password){
         const err = new Error("Fill all details first to register")
         err.statusCode = 400
         throw err
@@ -20,19 +38,12 @@ export const signup = async( req, res)=>{
         throw err
     }
 
-    if(!validator.isEmail(email)){
-        const err = new Error("Invalid email, it must be in correct format!")
-        err.statusCode = 400
-        throw err
-    }
 
-    
-    
-    // check - does email already exist -----
-    const existingUser = await Parent.findOne({email})
+    // check - does userName already exist -----
+    const existingUser = await Parent.findOne({userName})
     if(existingUser){
-        const err = new Error("Email already registered, enter another email!")
-        err.statusCode = 400
+        const err = new Error("userName already registered, enter another username!")
+        err.statusCode = 409
         throw err
     }
 
@@ -41,7 +52,6 @@ export const signup = async( req, res)=>{
 
     const parent = new Parent({
         userName, 
-        email,
         password : hashedPassword,
     })
 
@@ -56,9 +66,10 @@ export const signup = async( req, res)=>{
  }
 
 export const login = async( req, res)=>{
-    const {user} = req.body
-    
+
     try {
+        const {user} = req.body
+    
         let token = await jwt.sign({id : user._id, role : user.role}, process.env.secret_key, {
             expiresIn : "7d"
         })
@@ -66,7 +77,7 @@ export const login = async( req, res)=>{
         res.cookie('token', token)
         .status(200)
         .json({
-            message : "login successfull",
+            message : `${user.role} login successfull`,
             role : user.role
         })
 
@@ -95,4 +106,24 @@ export const logout = async(req, res)=>{
         err.statusCode = 500
         throw err
     }
+}
+
+
+export const verify = async(req, res)=>{
+
+    const user= req.user
+
+    if(user){
+        res.status(200).json({
+            message : "user authenticated",
+            role : user.role
+        })
+    }
+    else{
+        const err = new Error("user not authenticated, login first !")
+        err.statusCode = 401
+        throw err
+    }
+
+
 }
