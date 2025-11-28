@@ -31,16 +31,10 @@ Kids can view allowed videos and create playlists.
 git clone <repo-url>
 cd <project-folder>
 
-
 npm install
 
-```sh
-
----
 Create a .env file inside backend folder:
 
----
-```sh
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
 PORT=3000
@@ -48,4 +42,3 @@ PORT=3000
 
 cd ../frontend
 npm install
-```sh
